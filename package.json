@@ -1,0 +1,12 @@
+{
+  "name": "sport115ntpc-line",
+  "version": "1.0.0",
+  "description": "LINE campaign app for sport115ntpc",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
