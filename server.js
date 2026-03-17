@@ -47,7 +47,7 @@ async function handleEvent(event) {
             '歡迎加入我們的 Line！\n\n' +
             '今年我們很榮幸參與\n' +
             '2026 全障運賽事的贊助與支持\n\n' +
-            '一起為努力突破自我的選手們加油 💪'
+            '一起為努力突破自我的選手們加油💪'
         },
         {
           type: 'flex',
@@ -69,7 +69,7 @@ async function handleEvent(event) {
                 },
                 {
                   type: 'text',
-                  text: '小編已幫您準備好 Epson M310 專屬優惠券與型錄，有需要可直接查看。',
+                  text: '我已幫您準備好 Epson M310 專屬優惠券與型錄，趕快查收!!!',
                   size: 'sm',
                   color: '#666666',
                   wrap: true
@@ -90,7 +90,7 @@ async function handleEvent(event) {
                       height: 'sm',
                       action: {
                         type: 'uri',
-                        label: '領取 M310 優惠券',
+                        label: '我想領取優惠券',
                         uri: 'https://lin.ee/nP7OLzc'
                       }
                     },
@@ -100,7 +100,7 @@ async function handleEvent(event) {
                       height: 'sm',
                       action: {
                         type: 'postback',
-                        label: '查看 M310 型錄',
+                        label: '我要查看型錄',
                         data: 'action=view_catalog'
                       }
                     }
@@ -116,7 +116,7 @@ async function handleEvent(event) {
             '如果未來需要設備或相關資訊，\n' +
             '我會第一時間提供給您。\n' +
             '先讓我認識一下新朋友 😊\n\n' +
-            '趕快留下您的服務單位與大名吧~'
+            '趕快留下您的【服務單位】與【大名】吧~'
         }
       ];
 
