@@ -51,7 +51,7 @@ async function handleEvent(event) {
   const userText = event.message.text.trim();
   console.log('userText =', userText);
 
-  if (userText === '我來為2026全障運選手加油了~') {
+  if (userText.includes('我來為2026全障運選手加油'))  {
     console.log('keyword matched');
 
     const messages = [
