@@ -23,9 +23,6 @@ app.get('/health', (req, res) => {
 // webhook
 app.post('/webhook', line.middleware(config), async (req, res) => {
   try {
-    console.log('=== webhook received ===');
-    console.log(JSON.stringify(req.body, null, 2));
-
     const results = await Promise.all(req.body.events.map(handleEvent));
     res.json(results);
   } catch (error) {
@@ -35,71 +32,76 @@ app.post('/webhook', line.middleware(config), async (req, res) => {
 });
 
 async function handleEvent(event) {
-  console.log('=== event ===');
-  console.log(JSON.stringify(event, null, 2));
+  console.log('EVENT:', JSON.stringify(event, null, 2));
 
-  if (event.type !== 'message') {
-    console.log('skip: not message');
-    return null;
-  }
+  // 文字訊息
+  if (event.type === 'message' && event.message.type === 'text') {
+    const userText = event.message.text.trim();
 
-  if (event.message.type !== 'text') {
-    console.log('skip: not text');
-    return null;
-  }
-
-  const userText = event.message.text.trim();
-  console.log('userText =', userText);
-
-  if (userText.includes('我來為2026全障運選手加油'))  {
-    console.log('keyword matched');
-
-    const messages = [
-      {
-        type: 'text',
-        text:
-          '嗨～我是小編 😊\n' +
-          '歡迎加入我們的 Line！\n\n' +
-          '今年我們很榮幸參與\n' +
-          '2026 全障運賽事的贊助與支持\n\n' +
-          '一起為努力突破自我的選手們加油 💪'
-      },
-      {
-        type: 'template',
-        altText: 'M310 優惠券與型錄',
-        template: {
-          type: 'buttons',
+    if (userText.includes('我來為2026全障運選手加油')) {
+      const messages = [
+        {
+          type: 'text',
           text:
-            '為了替選手們應援\n' +
-            '小編準備了一份 Epson M310 專屬優惠券\n' +
-            '有需要的朋友可以直接領取 👇',
-          actions: [
-            {
-              type: 'uri',
-              label: '領取 M310 優惠券',
-              uri: 'https://lin.ee/nP7OLzc'
-            },
-            {
-              type: 'uri',
-              label: '查看 M310 型錄',
-              uri: 'https://sport115ntpc-line.onrender.com/public/catalog.html'
-            }
-          ]
+            '嗨～我是小編 😊\n' +
+            '歡迎加入我們的 Line！\n\n' +
+            '今年我們很榮幸參與\n' +
+            '2026 全障運賽事的贊助與支持\n\n' +
+            '一起為努力突破自我的選手們加油 💪'
+        },
+        {
+          type: 'template',
+          altText: 'M310 優惠券與型錄',
+          template: {
+            type: 'buttons',
+            text:
+              '為了替選手們應援\n' +
+              '小編準備了一份 Epson M310 專屬優惠券\n' +
+              '有需要的朋友可以直接領取 👇',
+            actions: [
+              {
+                type: 'uri',
+                label: '領取 M310 優惠券',
+                uri: 'https://lin.ee/nP7OLzc'
+              },
+              {
+                type: 'postback',
+                label: '查看 M310 型錄',
+                data: 'action=view_catalog'
+              }
+            ]
+          }
         }
-      }
-    ];
+      ];
 
-    try {
-      const result = await client.replyMessage(event.replyToken, messages);
-      console.log('reply success', result);
-      return result;
-    } catch (err) {
-      console.error('reply failed:', err?.response?.data || err.message || err);
-      return null;
+      return client.replyMessage(event.replyToken, messages);
     }
+
+    return null;
   }
 
-  console.log('keyword not matched');
+  // postback：查看型錄
+  if (event.type === 'postback') {
+    if (event.postback.data === 'action=view_catalog') {
+      const messages = [
+        {
+          type: 'image',
+          originalContentUrl: 'https://sport115ntpc-line.onrender.com/assets/m310-1.jpg',
+          previewImageUrl: 'https://sport115ntpc-line.onrender.com/assets/m310-1.jpg'
+        },
+        {
+          type: 'image',
+          originalContentUrl: 'https://sport115ntpc-line.onrender.com/assets/m310-2.jpg',
+          previewImageUrl: 'https://sport115ntpc-line.onrender.com/assets/m310-2.jpg'
+        }
+      ];
+
+      return client.replyMessage(event.replyToken, messages);
+    }
+
+    return null;
+  }
+
   return null;
 }
 
