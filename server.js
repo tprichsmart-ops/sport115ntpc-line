@@ -11,7 +11,7 @@ const config = {
 
 const client = new line.Client(config);
 
-// 提供靜態檔案
+// 靜態檔案
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
@@ -20,27 +20,40 @@ app.get('/health', (req, res) => {
   res.status(200).send('ok');
 });
 
-// LINE webhook
+// webhook
 app.post('/webhook', line.middleware(config), async (req, res) => {
   try {
+    console.log('=== webhook received ===');
+    console.log(JSON.stringify(req.body, null, 2));
+
     const results = await Promise.all(req.body.events.map(handleEvent));
     res.json(results);
   } catch (error) {
-    console.error('Webhook Error:', error);
+    console.error('Webhook Error:', error?.response?.data || error.message || error);
     res.status(500).end();
   }
 });
 
 async function handleEvent(event) {
-  // 只處理文字訊息
-  if (event.type !== 'message' || event.message.type !== 'text') {
+  console.log('=== event ===');
+  console.log(JSON.stringify(event, null, 2));
+
+  if (event.type !== 'message') {
+    console.log('skip: not message');
+    return null;
+  }
+
+  if (event.message.type !== 'text') {
+    console.log('skip: not text');
     return null;
   }
 
   const userText = event.message.text.trim();
+  console.log('userText =', userText);
 
-  // 觸發關鍵字
   if (userText === '我來為2026全障運選手加油了~') {
+    console.log('keyword matched');
+
     const messages = [
       {
         type: 'text',
@@ -76,9 +89,17 @@ async function handleEvent(event) {
       }
     ];
 
-    return client.replyMessage(event.replyToken, messages);
+    try {
+      const result = await client.replyMessage(event.replyToken, messages);
+      console.log('reply success', result);
+      return result;
+    } catch (err) {
+      console.error('reply failed:', err?.response?.data || err.message || err);
+      return null;
+    }
   }
 
+  console.log('keyword not matched');
   return null;
 }
 
