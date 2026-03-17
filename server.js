@@ -54,17 +54,48 @@ async function handleEvent(event) {
 
   if (event.type === 'postback') {
 
-    if (event.postback.data === 'action=pg2026_coupon') {
+   if (event.postback.data === 'action=pg2026_coupon') {
 
-      const messages = [
-        {
-          type: 'text',
-          text: '小編已幫您準備好 Epson M310 專屬優惠券 🎁\n\nhttps://raw.githubusercontent.com/tprichsmart-ops/sport115ntpc-line/main/assets/EPSON%20AL-M310DN%20%E5%9E%8B%E9%8C%84.pdf'
-        }
-      ]
+  const messages = [
 
-      return client.replyMessage(event.replyToken, messages)
+    {
+      type: 'text',
+      text: '小編已幫您準備好 Epson M310 專屬優惠券 🎁'
+    },
+
+    {
+      type: 'template',
+      altText: '開啟優惠券',
+      template: {
+        type: 'buttons',
+        text: '點擊下方按鈕即可開啟優惠券',
+        actions: [
+          {
+            type: 'uri',
+            label: '開啟 M310 優惠券',
+            uri: 'https://line.me/R/ch/1654883387?couponId=01KKWNX2DTRQ8G3S9X8YE0E77X'
+          }
+        ]
+      }
+    },
+
+    {
+      type: 'file',
+      fileName: 'EPSON M310 型錄.pdf',
+      fileSize: 1000000,
+      url: 'https://raw.githubusercontent.com/tprichsmart-ops/sport115ntpc-line/main/assets/EPSON%20AL-M310DN%20%E5%9E%8B%E9%8C%84.pdf'
+    },
+
+    {
+      type: 'text',
+      text: '想先認識一下新朋友 😊\n\n可以跟小編分享：\n1️⃣ 服務單位\n2️⃣ 您的大名'
     }
+
+  ]
+
+  return client.replyMessage(event.replyToken, messages)
+
+}
   }
 
   return Promise.resolve(null)
