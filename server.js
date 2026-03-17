@@ -54,7 +54,7 @@ async function handleEvent(event) {
 
   if (event.type === 'postback') {
 
-   if (event.postback.data === 'action=pg2026_coupon') {
+  if (event.postback.data === 'action=pg2026_coupon') {
 
   const messages = [
 
@@ -68,7 +68,7 @@ async function handleEvent(event) {
       altText: '開啟優惠券',
       template: {
         type: 'buttons',
-        text: '點擊下方按鈕即可開啟優惠券',
+        text: '點擊下方按鈕開啟優惠券',
         actions: [
           {
             type: 'uri',
@@ -80,21 +80,29 @@ async function handleEvent(event) {
     },
 
     {
-      type: 'file',
-      fileName: 'EPSON M310 型錄.pdf',
-      fileSize: 1000000,
-      url: 'https://raw.githubusercontent.com/tprichsmart-ops/sport115ntpc-line/main/assets/EPSON%20AL-M310DN%20%E5%9E%8B%E9%8C%84.pdf'
+      type: 'template',
+      altText: '下載型錄',
+      template: {
+        type: 'buttons',
+        text: '需要產品詳細資訊可以下載型錄',
+        actions: [
+          {
+            type: 'uri',
+            label: '下載 M310 型錄',
+            uri: 'https://myppt.cc/TWD9lK'
+          }
+        ]
+      }
     },
 
     {
       type: 'text',
-      text: '想先認識一下新朋友 😊\n\n可以跟小編分享：\n1️⃣ 服務單位\n2️⃣ 您的大名'
+      text: '想先認識一下新朋友 😊\n\n請跟小編分享：\n1️⃣ 服務單位\n2️⃣ 您的大名'
     }
 
   ]
 
   return client.replyMessage(event.replyToken, messages)
-
 }
   }
 
