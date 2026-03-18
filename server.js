@@ -67,43 +67,43 @@ async function handleEvent(event) {
   type: 'carousel',
   contents: [
     {
-      type: 'bubble',
-      body: {
-        type: 'box',
-        layout: 'vertical',
-        spacing: 'md',
-        contents: [
-          {
-            type: 'text',
-            text: '2026全障運應援抽獎',
-            weight: 'bold',
-            size: 'xl',
-            wrap: true
-          },
-          {
-            type: 'text',
-            text: '人人有獎，最高價值1萬元',
-            size: 'sm',
-            color: '#666666',
-            wrap: true
-          },
-          {
-            type: 'separator',
-            margin: 'md'
-          },
-          {
-            type: 'button',
-            style: 'primary',
-            margin: 'md',
-            action: {
-              type: 'uri',
-              label: '立即抽獎',
-              uri: LIFF_URL
-            }
-          }
-        ]
+  type: 'bubble',
+  body: {
+    type: 'box',
+    layout: 'vertical',
+    spacing: 'md',
+    contents: [
+      {
+        type: 'text',
+        text: '2026全障運應援抽獎',
+        weight: 'bold',
+        size: 'xl',
+        wrap: true
+      },
+      {
+        type: 'text',
+        text: '人人有獎，最高價值1萬元',
+        size: 'sm',
+        color: '#666666',
+        wrap: true
+      },
+      {
+        type: 'separator',
+        margin: 'md'
+      },
+      {
+        type: 'button',
+        style: 'primary',
+        margin: 'md',
+        action: {
+          type: 'uri',
+          label: '立即抽獎',
+          uri: LIFF_URL
+        }
       }
-    },
+    ]
+  }
+},
     {
       type: 'bubble',
       hero: {
