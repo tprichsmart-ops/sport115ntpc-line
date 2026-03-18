@@ -64,138 +64,138 @@ async function handleEvent(event) {
           type: 'flex',
           altText: '2026全障運應援抽獎',
           contents: {
-            type: 'carousel',
-            contents: [
-              {
-                type: 'bubble',
-                hero: {
-                  type: 'image',
-                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_M310.jpg',
-                  size: 'full',
-                  aspectRatio: '1:1',
-                  aspectMode: 'cover'
-                },
-                body: {
-                  type: 'box',
-                  layout: 'vertical',
-                  spacing: 'sm',
-                  contents: [
-                    {
-                      type: 'text',
-                      text: 'EPSON M310DN 印表機 1 台',
-                      weight: 'bold',
-                      size: 'md',
-                      wrap: true
-                    },
-                    {
-                      type: 'text',
-                      text: '價值 10,900 元',
-                      size: 'sm',
-                      color: '#666666'
-                    }
-                  ]
-                }
-              },
-              {
-                type: 'bubble',
-                hero: {
-                  type: 'image',
-                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_toner.jpg',
-                  size: 'full',
-                  aspectRatio: '1:1',
-                  aspectMode: 'cover'
-                },
-                body: {
-                  type: 'box',
-                  layout: 'vertical',
-                  spacing: 'sm',
-                  contents: [
-                    {
-                      type: 'text',
-                      text: '隨機黑色碳粉匣贈品 1 支',
-                      weight: 'bold',
-                      size: 'md',
-                      wrap: true
-                    },
-                    {
-                      type: 'text',
-                      text: '價值 3,700 元',
-                      size: 'sm',
-                      color: '#666666'
-                    }
-                  ]
-                }
-              },
-              {
-                type: 'bubble',
-                hero: {
-                  type: 'image',
-                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_0.jpg',
-                  size: 'full',
-                  aspectRatio: '1:1',
-                  aspectMode: 'cover'
-                },
-                body: {
-                  type: 'box',
-                  layout: 'vertical',
-                  spacing: 'sm',
-                  contents: [
-                    {
-                      type: 'text',
-                      text: '全障運應援參加禮優惠券 1 張',
-                      weight: 'bold',
-                      size: 'md',
-                      wrap: true
-                    },
-                    {
-                      type: 'text',
-                      text: '人人有獎',
-                      size: 'sm',
-                      color: '#666666'
-                    }
-                  ]
-                }
-              },
-              {
-                type: 'bubble',
-                body: {
-                  type: 'box',
-                  layout: 'vertical',
-                  spacing: 'md',
-                  contents: [
-                    {
-                      type: 'text',
-                      text: '2026全障運應援抽獎',
-                      weight: 'bold',
-                      size: 'xl',
-                      wrap: true
-                    },
-                    {
-                      type: 'text',
-                      text: '人人有獎，最高價值1萬元',
-                      size: 'sm',
-                      color: '#666666',
-                      wrap: true
-                    },
-                    {
-                      type: 'separator',
-                      margin: 'md'
-                    },
-                    {
-                      type: 'button',
-                      style: 'primary',
-                      margin: 'md',
-                      action: {
-                        type: 'uri',
-                        label: '立即抽獎',
-                        uri: LIFF_URL
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
+  type: 'carousel',
+  contents: [
+    {
+      type: 'bubble',
+      body: {
+        type: 'box',
+        layout: 'vertical',
+        spacing: 'md',
+        contents: [
+          {
+            type: 'text',
+            text: '2026全障運應援抽獎',
+            weight: 'bold',
+            size: 'xl',
+            wrap: true
+          },
+          {
+            type: 'text',
+            text: '人人有獎，最高價值1萬元',
+            size: 'sm',
+            color: '#666666',
+            wrap: true
+          },
+          {
+            type: 'separator',
+            margin: 'md'
+          },
+          {
+            type: 'button',
+            style: 'primary',
+            margin: 'md',
+            action: {
+              type: 'uri',
+              label: '立即抽獎',
+              uri: LIFF_URL
+            }
           }
+        ]
+      }
+    },
+    {
+      type: 'bubble',
+      hero: {
+        type: 'image',
+        url: 'https://sport115ntpc-line.onrender.com/assets/GET_M310.jpg',
+        size: 'full',
+        aspectRatio: '1:1',
+        aspectMode: 'cover'
+      },
+      body: {
+        type: 'box',
+        layout: 'vertical',
+        spacing: 'sm',
+        contents: [
+          {
+            type: 'text',
+            text: 'EPSON M310DN 印表機 1 台',
+            weight: 'bold',
+            size: 'md',
+            wrap: true
+          },
+          {
+            type: 'text',
+            text: '價值 10,900 元',
+            size: 'sm',
+            color: '#666666'
+          }
+        ]
+      }
+    },
+    {
+      type: 'bubble',
+      hero: {
+        type: 'image',
+        url: 'https://sport115ntpc-line.onrender.com/assets/GET_toner.jpg',
+        size: 'full',
+        aspectRatio: '1:1',
+        aspectMode: 'cover'
+      },
+      body: {
+        type: 'box',
+        layout: 'vertical',
+        spacing: 'sm',
+        contents: [
+          {
+            type: 'text',
+            text: '隨機黑色碳粉匣贈品 1 支',
+            weight: 'bold',
+            size: 'md',
+            wrap: true
+          },
+          {
+            type: 'text',
+            text: '價值 3,700 元',
+            size: 'sm',
+            color: '#666666'
+          }
+        ]
+      }
+    },
+    {
+      type: 'bubble',
+      hero: {
+        type: 'image',
+        url: 'https://sport115ntpc-line.onrender.com/assets/GET_0.jpg',
+        size: 'full',
+        aspectRatio: '1:1',
+        aspectMode: 'cover'
+      },
+      body: {
+        type: 'box',
+        layout: 'vertical',
+        spacing: 'sm',
+        contents: [
+          {
+            type: 'text',
+            text: '全障運應援參加禮優惠券 1 張',
+            weight: 'bold',
+            size: 'md',
+            wrap: true
+          },
+          {
+            type: 'text',
+            text: '人人有獎',
+            size: 'sm',
+            color: '#666666'
+          }
+        ]
+      }
+    }
+  ]
+}
         }
       ];
 
