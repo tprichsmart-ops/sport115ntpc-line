@@ -11,6 +11,9 @@ const config = {
 
 const client = new line.Client(config);
 
+const LIFF_ID = process.env.LIFF_ID || '2009521956-OmBMwwQz';
+const LIFF_URL = `https://liff.line.me/${LIFF_ID}`;
+
 // 靜態檔案
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
@@ -34,89 +37,185 @@ app.post('/webhook', line.middleware(config), async (req, res) => {
 async function handleEvent(event) {
   console.log('EVENT:', JSON.stringify(event, null, 2));
 
+  // -----------------------------
   // 文字訊息
+  // -----------------------------
   if (event.type === 'message' && event.message.type === 'text') {
-    const userText = event.message.text.trim();
+    const userText = (event.message.text || '').trim();
 
+    // 1) 活動入口關鍵字
     if (userText.includes('我來為2026全障運選手加油')) {
       const messages = [
         {
           type: 'text',
           text:
-            '嗨～我是小編 😊\n' +
-            '歡迎加入我們的 Line！\n\n' +
+            '嗨～歡迎加入我們的 Line！\n' +
             '今年我們很榮幸參與\n' +
             '2026 全障運賽事的贊助與支持\n\n' +
-            '一起為努力突破自我的選手們加油💪'
-        },
-        {
-          type: 'flex',
-          altText: 'M310 優惠券與型錄',
-          contents: {
-            type: 'bubble',
-            body: {
-              type: 'box',
-              layout: 'vertical',
-              spacing: 'md',
-              contents: [
-                {
-                  type: 'text',
-                  text: '2026 全障運專屬應援禮',
-                  weight: 'bold',
-                  size: 'xl',
-                  wrap: true,
-                  color: '#111111'
-                },
-                {
-                  type: 'text',
-                  text: '我已幫您準備好 Epson M310 專屬優惠券與型錄，趕快查收!!!',
-                  size: 'sm',
-                  color: '#666666',
-                  wrap: true
-                },
-                {
-                  type: 'separator',
-                  margin: 'md'
-                },
-                {
-                  type: 'box',
-                  layout: 'vertical',
-                  spacing: 'sm',
-                  margin: 'md',
-                  contents: [
-                    {
-                      type: 'button',
-                      style: 'primary',
-                      height: 'sm',
-                      action: {
-                        type: 'uri',
-                        label: '我想領取優惠券',
-                        uri: 'https://lin.ee/nP7OLzc'
-                      }
-                    },
-                    {
-                      type: 'button',
-                      style: 'secondary',
-                      height: 'sm',
-                      action: {
-                        type: 'postback',
-                        label: '我要查看型錄',
-                        data: 'action=view_catalog'
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          }
+            '一起為 2026 全障運選手加油💪\n\n' +
+            '🎯 您已獲得抽獎資格，點擊下方按鈕即可開始抽獎'
         },
         {
           type: 'text',
           text:
-            '如果未來需要設備或相關資訊，\n' +
-            '我會第一時間提供給您。\n' +
-            '先讓我認識一下新朋友 😊\n\n' +
-            '趕快留下您的【服務單位】與【大名】吧~'
+            '本次應援優惠獎項如下，點擊下方按鈕試試手氣吧 🎁'
+        },
+        {
+          type: 'flex',
+          altText: '2026全障運應援抽獎',
+          contents: {
+            type: 'carousel',
+            contents: [
+              {
+                type: 'bubble',
+                hero: {
+                  type: 'image',
+                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_M310.jpg',
+                  size: 'full',
+                  aspectRatio: '1:1',
+                  aspectMode: 'cover'
+                },
+                body: {
+                  type: 'box',
+                  layout: 'vertical',
+                  spacing: 'sm',
+                  contents: [
+                    {
+                      type: 'text',
+                      text: 'EPSON M310DN 印表機 1 台',
+                      weight: 'bold',
+                      size: 'md',
+                      wrap: true
+                    },
+                    {
+                      type: 'text',
+                      text: '價值 10,900 元',
+                      size: 'sm',
+                      color: '#666666'
+                    }
+                  ]
+                }
+              },
+              {
+                type: 'bubble',
+                hero: {
+                  type: 'image',
+                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_toner.jpg',
+                  size: 'full',
+                  aspectRatio: '1:1',
+                  aspectMode: 'cover'
+                },
+                body: {
+                  type: 'box',
+                  layout: 'vertical',
+                  spacing: 'sm',
+                  contents: [
+                    {
+                      type: 'text',
+                      text: '隨機黑色碳粉匣贈品 1 支',
+                      weight: 'bold',
+                      size: 'md',
+                      wrap: true
+                    },
+                    {
+                      type: 'text',
+                      text: '價值 3,700 元',
+                      size: 'sm',
+                      color: '#666666'
+                    }
+                  ]
+                }
+              },
+              {
+                type: 'bubble',
+                hero: {
+                  type: 'image',
+                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_0.jpg',
+                  size: 'full',
+                  aspectRatio: '1:1',
+                  aspectMode: 'cover'
+                },
+                body: {
+                  type: 'box',
+                  layout: 'vertical',
+                  spacing: 'sm',
+                  contents: [
+                    {
+                      type: 'text',
+                      text: '全障運應援參加禮優惠券 1 張',
+                      weight: 'bold',
+                      size: 'md',
+                      wrap: true
+                    },
+                    {
+                      type: 'text',
+                      text: '人人有獎',
+                      size: 'sm',
+                      color: '#666666'
+                    }
+                  ]
+                }
+              },
+              {
+                type: 'bubble',
+                body: {
+                  type: 'box',
+                  layout: 'vertical',
+                  spacing: 'md',
+                  contents: [
+                    {
+                      type: 'text',
+                      text: '2026全障運應援抽獎',
+                      weight: 'bold',
+                      size: 'xl',
+                      wrap: true
+                    },
+                    {
+                      type: 'text',
+                      text: '人人有獎，最高價值1萬元',
+                      size: 'sm',
+                      color: '#666666',
+                      wrap: true
+                    },
+                    {
+                      type: 'separator',
+                      margin: 'md'
+                    },
+                    {
+                      type: 'button',
+                      style: 'primary',
+                      margin: 'md',
+                      action: {
+                        type: 'uri',
+                        label: '立即抽獎',
+                        uri: LIFF_URL
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ];
+
+      return client.replyMessage(event.replyToken, messages);
+    }
+
+    // 2) 使用者主動表示要使用優惠券
+    if (userText.includes('我要使用優惠券，請協助我')) {
+      const messages = [
+        {
+          type: 'text',
+          text:
+            '好的，我來協助您使用這次的應援優惠 😊\n\n' +
+            '請直接回覆以下資訊，我們就能盡快幫您安排：\n\n' +
+            '1.裝機窗口姓名\n' +
+            '2.聯絡電話\n' +
+            '3.安裝地址：\n' +
+            '4.服務單位名稱：\n' +
+            '5.統編：\n\n' +
+            '我會請專人盡快與您聯繫'
         }
       ];
 
@@ -126,9 +225,14 @@ async function handleEvent(event) {
     return null;
   }
 
-  // postback：查看型錄，送出兩張圖
+  // -----------------------------
+  // postback
+  // -----------------------------
   if (event.type === 'postback') {
-    if (event.postback.data === 'action=view_catalog') {
+    const postbackData = event.postback?.data || '';
+
+    // 查看型錄 → 傳兩張圖片
+    if (postbackData === 'action=view_catalog') {
       const messages = [
         {
           type: 'image',
