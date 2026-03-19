@@ -22,6 +22,8 @@ const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY;
 // 靜態檔案
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
+
+// 只讓 /api 使用 JSON parser，避免影響 LINE webhook 驗簽
 app.use('/api', express.json());
 
 // 健康檢查
@@ -158,7 +160,6 @@ async function findUserDrawRecord(userId) {
 // LIFF API
 // =======================
 
-// 查詢抽獎狀態
 app.post('/api/draw/status', async (req, res) => {
   try {
     const { accessToken } = req.body || {};
@@ -188,7 +189,6 @@ app.post('/api/draw/status', async (req, res) => {
   }
 });
 
-// 執行抽獎
 app.post('/api/draw', async (req, res) => {
   try {
     const { accessToken } = req.body || {};
@@ -229,7 +229,6 @@ app.post('/api/draw', async (req, res) => {
   }
 });
 
-// 標記已領券
 app.post('/api/claim', async (req, res) => {
   try {
     const { accessToken } = req.body || {};
