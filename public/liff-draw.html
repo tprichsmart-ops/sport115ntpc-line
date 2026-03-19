@@ -1,17 +1,342 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
-  <meta charset="utf-8" />
-  <title>抽獎頁</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 全障運應援抽獎</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+      color: #111827;
+    }
+    .wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 20px 16px 32px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+      overflow: hidden;
+    }
+    .hero {
+      background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+      color: #fff;
+      padding: 20px;
+    }
+    .hero .tag {
+      font-size: 12px;
+      opacity: .9;
+      margin-bottom: 8px;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .hero p {
+      margin: 10px 0 0;
+      font-size: 14px;
+      color: #dcfce7;
+      line-height: 1.6;
+    }
+    .body {
+      padding: 18px;
+    }
+    .status {
+      text-align: center;
+      margin-bottom: 14px;
+      font-size: 15px;
+      color: #374151;
+      min-height: 24px;
+    }
+    .slot {
+      position: relative;
+      width: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+    }
+    .slot img {
+      display: none;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+    }
+    .slot img.active {
+      display: block;
+    }
+    .result-box {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 16px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+    }
+    .result-box.show {
+      display: block;
+    }
+    .result-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #166534;
+      margin: 0 0 10px;
+      line-height: 1.4;
+    }
+    .result-desc {
+      font-size: 15px;
+      color: #374151;
+      line-height: 1.7;
+      margin: 0 0 14px;
+      white-space: pre-line;
+    }
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 15px 16px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+    .btn-primary {
+      background: #16a34a;
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(22,163,74,.25);
+    }
+    .btn-secondary {
+      background: #111827;
+      color: #fff;
+      margin-top: 10px;
+    }
+    .hint {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.6;
+      text-align: center;
+    }
+    .loading {
+      text-align: center;
+      font-size: 14px;
+      color: #6b7280;
+      padding: 40px 0;
+    }
+  </style>
 </head>
-<body style="text-align:center; font-family:sans-serif;">
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="hero">
+        <div class="tag">🏃‍♂️ 2026 全障運應援活動</div>
+        <h1>應援抽獎</h1>
+        <p>人人有獎，最高價值 1 萬元。點下按鈕，立即開始抽獎。</p>
+      </div>
 
-<h2>抽獎頁測試</h2>
-<p>LIFF 已成功開啟 🎉</p>
+      <div class="body">
+        <div id="loading" class="loading">LIFF 載入中...</div>
 
-<button onclick="alert('之後這裡會做抽獎動畫')">
-  測試按鈕
-</button>
+        <div id="main" style="display:none;">
+          <div id="status" class="status">準備好了就開始抽獎 🎁</div>
 
+          <div class="slot">
+            <img id="img0" src="/assets/GET_0.jpg" alt="參加禮優惠券" class="active" />
+            <img id="img1" src="/assets/GET_toner.jpg" alt="黑色碳粉匣贈品" />
+            <img id="img2" src="/assets/GET_M310.jpg" alt="EPSON M310DN 印表機" />
+          </div>
+
+          <button id="drawBtn" class="btn btn-primary">立即抽獎</button>
+
+          <div id="resultBox" class="result-box">
+            <div id="resultTitle" class="result-title"></div>
+            <div id="resultDesc" class="result-desc"></div>
+            <button id="claimBtn" class="btn btn-primary">回到 LINE 領取優惠券</button>
+            <button id="closeBtn" class="btn btn-secondary">關閉此頁</button>
+          </div>
+
+          <div class="hint">
+            抽獎結果將直接顯示於此頁面。<br />
+            下一階段再接入「一個帳號只能抽一次」。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const LIFF_ID = '2009521956-OmBMwwQz';
+
+    const prizes = [
+      {
+        key: 'coupon',
+        label: '全障運應援參加禮優惠券',
+        imageIndex: 0,
+        weight: 0,
+        couponUrl: '',
+        title: '本輪未設定為最終中獎項',
+        desc: ''
+      },
+      {
+        key: 'toner',
+        label: '隨機黑色碳粉匣贈品優惠',
+        imageIndex: 1,
+        weight: 30,
+        couponUrl: 'https://lin.ee/yydvi5g',
+        title: '恭喜您抽中：\n隨機黑色碳粉匣贈品優惠 🎉',
+        desc: '請點下方按鈕回到 LINE 領取優惠券。'
+      },
+      {
+        key: 'm310',
+        label: 'EPSON M310DN 印表機應援優惠',
+        imageIndex: 2,
+        weight: 70,
+        couponUrl: 'https://lin.ee/nOBmzbiP',
+        title: '恭喜您抽中：\nEPSON M310DN 印表機應援優惠 🎉',
+        desc: '請點下方按鈕回到 LINE 領取優惠券。'
+      }
+    ];
+
+    const imgEls = [
+      document.getElementById('img0'),
+      document.getElementById('img1'),
+      document.getElementById('img2')
+    ];
+
+    const loadingEl = document.getElementById('loading');
+    const mainEl = document.getElementById('main');
+    const statusEl = document.getElementById('status');
+    const drawBtn = document.getElementById('drawBtn');
+    const resultBox = document.getElementById('resultBox');
+    const resultTitle = document.getElementById('resultTitle');
+    const resultDesc = document.getElementById('resultDesc');
+    const claimBtn = document.getElementById('claimBtn');
+    const closeBtn = document.getElementById('closeBtn');
+
+    let drawing = false;
+    let currentPrize = null;
+
+    function showImage(index) {
+      imgEls.forEach((el, i) => {
+        el.classList.toggle('active', i === index);
+      });
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function pickPrize() {
+      const pool = [];
+      prizes.forEach(prize => {
+        for (let i = 0; i < prize.weight; i++) {
+          pool.push(prize);
+        }
+      });
+      const randomIndex = Math.floor(Math.random() * pool.length);
+      return pool[randomIndex];
+    }
+
+    async function playAnimation(finalPrize) {
+      const sequence = [
+        2, 1, 0,
+        2, 1, 0,
+        2, 1, 0,
+        2, 1, 0
+      ];
+
+      let delay = 120;
+      statusEl.textContent = '抽獎進行中，請稍候...';
+
+      for (let i = 0; i < sequence.length; i++) {
+        showImage(sequence[i]);
+        await sleep(delay);
+        delay += 35;
+      }
+
+      // 先停在第三獎久一點，但不要做成「差點中」
+      showImage(0);
+      statusEl.textContent = '結果即將揭曉...';
+      await sleep(900);
+
+      // 再快速切到其他獎項，營造未揭曉感
+      showImage(1);
+      await sleep(260);
+      showImage(2);
+      await sleep(260);
+
+      // 最後停在實際獎項
+      showImage(finalPrize.imageIndex);
+      await sleep(300);
+    }
+
+    async function startDraw() {
+      if (drawing) return;
+      drawing = true;
+      drawBtn.disabled = true;
+      resultBox.classList.remove('show');
+
+      try {
+        currentPrize = pickPrize();
+        await playAnimation(currentPrize);
+
+        statusEl.textContent = '抽獎完成 🎉';
+        resultTitle.textContent = currentPrize.title;
+        resultDesc.textContent = currentPrize.desc;
+        resultBox.classList.add('show');
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = '抽獎失敗，請重新整理後再試一次。';
+      } finally {
+        drawing = false;
+      }
+    }
+
+    async function initLiff() {
+      try {
+        await liff.init({ liffId: LIFF_ID });
+
+        // 在 LIFF browser 中通常可直接取得資料；外部瀏覽器可能需要 login 流程
+        if (!liff.isLoggedIn()) {
+          liff.login();
+          return;
+        }
+
+        loadingEl.style.display = 'none';
+        mainEl.style.display = 'block';
+      } catch (err) {
+        console.error('LIFF init failed:', err);
+        loadingEl.textContent = 'LIFF 載入失敗，請回 LINE 後重新開啟。';
+      }
+    }
+
+    drawBtn.addEventListener('click', startDraw);
+
+    claimBtn.addEventListener('click', () => {
+      if (!currentPrize || !currentPrize.couponUrl) return;
+      window.location.href = currentPrize.couponUrl;
+    });
+
+    closeBtn.addEventListener('click', () => {
+      if (typeof liff !== 'undefined' && liff.isInClient()) {
+        liff.closeWindow();
+      } else {
+        window.close();
+      }
+    });
+
+    initLiff();
+  </script>
 </body>
 </html>
