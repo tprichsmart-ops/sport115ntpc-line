@@ -1,69 +1,263 @@
-{
-  type: 'bubble',
-  size: 'mega',
-  header: {
-    type: 'box',
-    layout: 'vertical',
-    backgroundColor: '#805AD5',
-    paddingAll: '20px',
-    contents: [
-      {
-        type: 'text',
-        text: '🏃‍♂️ 應援活動',
-        size: 'xs',
-        color: '#D6BCFA'
-      },
-      {
-        type: 'text',
-        text: '2026 全障運應援抽獎',
-        weight: 'bold',
-        color: '#FFFFFF',
-        size: 'xl',
-        wrap: true,
-        margin: 'md'
-      },
-      {
-        type: 'text',
-        text: '人人有獎，最高價值 1 萬元',
-        color: '#ECE8F3',
-        size: 'sm',
-        margin: 'md',
-        wrap: true
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 全障運應援抽獎</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 100%);
+      color: #111827;
+    }
+
+    .wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 20px 16px 32px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+      overflow: hidden;
+    }
+
+    /* 主視覺 */
+    .hero {
+      background: linear-gradient(135deg, #805AD5 0%, #6B46C1 100%);
+      color: #fff;
+      padding: 20px;
+    }
+
+    .hero .tag {
+      font-size: 12px;
+      color: #D6BCFA;
+      margin-bottom: 8px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+
+    .hero p {
+      margin: 10px 0 0;
+      font-size: 14px;
+      color: #ECE8F3;
+      line-height: 1.6;
+    }
+
+    .body {
+      padding: 18px;
+    }
+
+    .status {
+      text-align: center;
+      margin-bottom: 14px;
+      font-size: 15px;
+      color: #374151;
+      min-height: 24px;
+    }
+
+    .slot {
+      border-radius: 18px;
+      overflow: hidden;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+    }
+
+    .slot img {
+      display: none;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+    }
+
+    .slot img.active {
+      display: block;
+    }
+
+    /* 抽獎結果區 */
+    .result-box {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 16px;
+      background: #f5f3ff;
+      border: 1px solid #c4b5fd;
+    }
+
+    .result-box.show {
+      display: block;
+    }
+
+    .result-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #6B46C1;
+      margin-bottom: 10px;
+    }
+
+    .result-desc {
+      font-size: 15px;
+      color: #374151;
+      margin-bottom: 14px;
+      white-space: pre-line;
+    }
+
+    /* 按鈕 */
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 15px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: #6B46C1;
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(107,70,193,.25);
+    }
+
+    .btn-secondary {
+      background: #111827;
+      color: #fff;
+      margin-top: 10px;
+    }
+
+    .hint {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+
+      <div class="hero">
+        <div class="tag">🏃‍♂️ 2026 全障運應援活動</div>
+        <h1>應援抽獎</h1>
+        <p>人人有獎，最高價值 1 萬元，立即試試手氣 🎁</p>
+      </div>
+
+      <div class="body">
+
+        <div id="loading" class="loading">載入中...</div>
+
+        <div id="main" style="display:none;">
+          <div id="status" class="status">準備好了就開始抽獎 🎁</div>
+
+          <div class="slot">
+            <img id="img0" src="/assets/GET_0.jpg" class="active"/>
+            <img id="img1" src="/assets/GET_toner.jpg"/>
+            <img id="img2" src="/assets/GET_M310.jpg"/>
+          </div>
+
+          <button id="drawBtn" class="btn btn-primary">立即抽獎</button>
+
+          <div id="resultBox" class="result-box">
+            <div id="resultTitle" class="result-title"></div>
+            <div id="resultDesc" class="result-desc"></div>
+            <button id="claimBtn" class="btn btn-primary">回 LINE 領優惠券</button>
+            <button id="closeBtn" class="btn btn-secondary">關閉</button>
+          </div>
+
+          <div class="hint">
+            每人限抽一次（下一步會接後端控制）
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const LIFF_ID = '2009521956-OmBMwwQz';
+
+    const prizes = [
+      { key:'toner', weight:30, imageIndex:1, url:'https://lin.ee/yydvi5g', title:'恭喜抽中碳粉匣 🎉' },
+      { key:'m310', weight:70, imageIndex:2, url:'https://lin.ee/nOBmzbiP', title:'恭喜抽中 M310 🎉' }
+    ];
+
+    let currentPrize = null;
+
+    function pickPrize(){
+      const pool=[];
+      prizes.forEach(p=>{
+        for(let i=0;i<p.weight;i++){ pool.push(p);}
+      });
+      return pool[Math.floor(Math.random()*pool.length)];
+    }
+
+    function showImage(i){
+      document.querySelectorAll('.slot img').forEach((el,idx)=>{
+        el.classList.toggle('active', idx===i);
+      });
+    }
+
+    async function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+    async function draw(){
+      currentPrize = pickPrize();
+
+      const seq=[2,1,0,2,1,0,2,1,0];
+      for(let i of seq){
+        showImage(i);
+        await sleep(120);
       }
-    ]
-  },
-  body: {
-    type: 'box',
-    layout: 'vertical',
-    spacing: 'lg',
-    paddingAll: '20px',
-    contents: [
-      {
-        type: 'text',
-        text: '點擊下方按鈕，立即開始抽獎！',
-        size: 'md',
-        weight: 'bold',
-        color: '#111111',
-        wrap: true
-      },
-      {
-        type: 'text',
-        text: '本次應援活動人人有獎，快來試試手氣，把專屬優惠帶回家 🎁',
-        size: 'sm',
-        color: '#666666',
-        wrap: true
-      },
-      {
-        type: 'button',
-        style: 'primary',
-        height: 'md',
-        color: '#6B46C1',
-        action: {
-          type: 'uri',
-          label: '立即抽獎',
-          uri: LIFF_URL
-        }
-      }
-    ]
-  }
-}
+
+      showImage(0);
+      await sleep(900);
+      showImage(1);
+      await sleep(250);
+      showImage(2);
+      await sleep(250);
+
+      showImage(currentPrize.imageIndex);
+
+      document.getElementById('resultTitle').textContent=currentPrize.title;
+      document.getElementById('resultBox').classList.add('show');
+    }
+
+    document.getElementById('drawBtn').onclick=draw;
+
+    document.getElementById('claimBtn').onclick=()=>{
+      window.location.href=currentPrize.url;
+    };
+
+    document.getElementById('closeBtn').onclick=()=>{
+      if(liff.isInClient()) liff.closeWindow();
+    };
+
+    async function init(){
+      await liff.init({liffId:LIFF_ID});
+      document.getElementById('loading').style.display='none';
+      document.getElementById('main').style.display='block';
+    }
+
+    init();
+  </script>
+</body>
+</html>
