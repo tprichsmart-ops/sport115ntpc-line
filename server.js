@@ -88,7 +88,7 @@ async function handleEvent(event) {
   text: '🏃‍♂️ 應援活動',
   size: 'xs',
   color: '#BBF7D0'
-}
+     },
       {
         type: 'text',
         text: '人人有獎，最高價值 1 萬元',
