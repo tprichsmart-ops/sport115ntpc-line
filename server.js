@@ -22,7 +22,7 @@ const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY;
 // 靜態檔案
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
-app.use(express.json());
+app.use('/api', express.json());
 
 // 健康檢查
 app.get('/health', (req, res) => {
