@@ -169,7 +169,6 @@
   <script>
     const LIFF_ID = '2009521956-OmBMwwQz';
 
-    const images = [0, 1, 2];
     let drawing = false;
     let accessToken = '';
     let currentPrize = null;
@@ -191,11 +190,13 @@
         body: JSON.stringify(body)
       });
 
+      const data = await resp.json().catch(() => ({}));
+
       if (!resp.ok) {
-        throw new Error(`${url} failed: ${resp.status}`);
+        throw new Error(data.error || `${url} failed: ${resp.status}`);
       }
 
-      return resp.json();
+      return data;
     }
 
     function applyPrizeToUI(prize) {
@@ -207,7 +208,7 @@
     }
 
     async function playAnimation(finalPrize) {
-      const sequence = [2,1,0,2,1,0,2,1,0];
+      const sequence = [2, 1, 0, 2, 1, 0, 2, 1, 0];
       let delay = 120;
 
       document.getElementById('status').textContent = '抽獎進行中，請稍候...';
@@ -244,12 +245,12 @@
         document.getElementById('status').textContent = '您已完成本次抽獎';
         document.getElementById('resultTitle').textContent = '您已完成本次抽獎';
         document.getElementById('resultDesc').textContent =
-          '可直接回 LINE 查看您已領取的優惠券';
+          '可直接回 LINE 查看您已收到的優惠與說明';
       } else {
         document.getElementById('status').textContent = '您已完成本次抽獎';
         document.getElementById('resultTitle').textContent = '您已完成本次抽獎';
         document.getElementById('resultDesc').textContent =
-          '請回 LINE 領取您的對應優惠券';
+          '請點擊下方按鈕，回 LINE 查看您的優惠與後續說明';
       }
 
       currentPrize = data.prize;
@@ -259,6 +260,7 @@
 
     async function draw() {
       if (drawing) return;
+
       drawing = true;
       document.getElementById('drawBtn').disabled = true;
       document.getElementById('resultBox').classList.remove('show');
@@ -273,12 +275,12 @@
             document.getElementById('status').textContent = '您已完成本次抽獎';
             document.getElementById('resultTitle').textContent = '您已完成本次抽獎';
             document.getElementById('resultDesc').textContent =
-              '可直接回 LINE 查看您已領取的優惠券';
+              '可直接回 LINE 查看您已收到的優惠與說明';
           } else {
             document.getElementById('status').textContent = '您已完成本次抽獎';
             document.getElementById('resultTitle').textContent = '您已完成本次抽獎';
             document.getElementById('resultDesc').textContent =
-              '請回 LINE 領取您的對應優惠券';
+              '請點擊下方按鈕，回 LINE 查看您的優惠與後續說明';
           }
 
           currentPrize = data.prize;
@@ -304,13 +306,25 @@
     async function claimPrize() {
       if (!currentPrize) return;
 
+      const claimBtn = document.getElementById('claimBtn');
+      claimBtn.disabled = true;
+      claimBtn.textContent = '處理中...';
+
       try {
         await postJson('/api/claim', { accessToken });
-      } catch (err) {
-        console.error('claim error:', err);
-      }
+        await postJson('/api/push-after-draw', { accessToken });
 
-      window.location.href = currentPrize.couponUrl;
+        if (typeof liff !== 'undefined' && liff.isInClient()) {
+          liff.closeWindow();
+        } else {
+          window.close();
+        }
+      } catch (err) {
+        console.error('claimPrize error:', err);
+        document.getElementById('status').textContent = '處理失敗，請稍後再試。';
+        claimBtn.disabled = false;
+        claimBtn.textContent = '回 LINE 領優惠券';
+      }
     }
 
     async function init() {
