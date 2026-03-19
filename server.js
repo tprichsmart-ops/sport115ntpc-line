@@ -72,7 +72,7 @@ async function handleEvent(event) {
   header: {
     type: 'box',
     layout: 'vertical',
-    backgroundColor: '#16A34A',
+    backgroundColor: '#ECE8F3',
     paddingAll: '20px',
     contents: [
       {
@@ -124,7 +124,7 @@ async function handleEvent(event) {
         type: 'button',
         style: 'primary',
         height: 'md',
-        color: '#22C55E',
+        color: '#6B46C1',
         action: {
           type: 'uri',
           label: '立即抽獎',
