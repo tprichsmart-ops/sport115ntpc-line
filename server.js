@@ -72,7 +72,7 @@ async function handleEvent(event) {
   header: {
     type: 'box',
     layout: 'vertical',
-    backgroundColor: '#1D4ED8',
+    backgroundColor: '#16A34A',
     paddingAll: '20px',
     contents: [
       {
@@ -83,6 +83,12 @@ async function handleEvent(event) {
         size: 'xl',
         wrap: true
       },
+      {
+  type: 'text',
+  text: '🏃‍♂️ 應援活動',
+  size: 'xs',
+  color: '#BBF7D0'
+}
       {
         type: 'text',
         text: '人人有獎，最高價值 1 萬元',
@@ -118,7 +124,7 @@ async function handleEvent(event) {
         type: 'button',
         style: 'primary',
         height: 'md',
-        color: '#2563EB',
+        color: '#22C55E',
         action: {
           type: 'uri',
           label: '立即抽獎',
