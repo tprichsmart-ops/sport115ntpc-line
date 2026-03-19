@@ -17,7 +17,7 @@ const LIFF_URL = `https://liff.line.me/${LIFF_ID}`;
 
 const GOOGLE_SHEET_ID = process.env.GOOGLE_SHEET_ID;
 const GOOGLE_SERVICE_ACCOUNT_EMAIL = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY;
+const GOOGLE_PRIVATE_KEY_RAW = process.env.GOOGLE_PRIVATE_KEY || '';
 
 // 靜態檔案
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
@@ -32,12 +32,13 @@ app.get('/health', (req, res) => {
 });
 
 function getSheetsClient() {
-  const auth = new google.auth.JWT(
-    GOOGLE_SERVICE_ACCOUNT_EMAIL,
-    null,
-    (GOOGLE_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
-    ['https://www.googleapis.com/auth/spreadsheets']
-  );
+  const auth = new google.auth.GoogleAuth({
+    credentials: {
+      client_email: GOOGLE_SERVICE_ACCOUNT_EMAIL,
+      private_key: GOOGLE_PRIVATE_KEY_RAW.replace(/\\n/g, '\n'),
+    },
+    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+  });
 
   return google.sheets({ version: 'v4', auth });
 }
@@ -157,6 +158,43 @@ async function findUserDrawRecord(userId) {
 }
 
 // =======================
+// Google 測試 API
+// =======================
+app.get('/api/test-google', async (req, res) => {
+  try {
+    console.log('GOOGLE_SHEET_ID exists:', !!GOOGLE_SHEET_ID);
+    console.log('GOOGLE_SERVICE_ACCOUNT_EMAIL exists:', !!GOOGLE_SERVICE_ACCOUNT_EMAIL);
+    console.log('GOOGLE_PRIVATE_KEY exists:', !!GOOGLE_PRIVATE_KEY_RAW);
+    console.log(
+      'GOOGLE_PRIVATE_KEY has BEGIN:',
+      GOOGLE_PRIVATE_KEY_RAW.includes('BEGIN PRIVATE KEY')
+    );
+
+    const sheets = getSheetsClient();
+
+    const resp = await sheets.spreadsheets.values.get({
+      spreadsheetId: GOOGLE_SHEET_ID,
+      range: 'Sheet1!A1:F5'
+    });
+
+    return res.json({
+      ok: true,
+      values: resp.data.values || []
+    });
+  } catch (error) {
+    console.error(
+      '/api/test-google error:',
+      error?.response?.data || error?.errors || error?.message || error
+    );
+
+    return res.status(500).json({
+      ok: false,
+      error: error?.response?.data || error?.errors || error?.message || String(error)
+    });
+  }
+});
+
+// =======================
 // LIFF API
 // =======================
 
@@ -184,7 +222,10 @@ app.post('/api/draw/status', async (req, res) => {
       prize
     });
   } catch (error) {
-    console.error('/api/draw/status error:', error.message || error);
+    console.error(
+      '/api/draw/status error:',
+      error?.response?.data || error?.errors || error?.message || error
+    );
     return res.status(500).json({ error: 'status check failed' });
   }
 });
@@ -224,7 +265,10 @@ app.post('/api/draw', async (req, res) => {
       prize
     });
   } catch (error) {
-    console.error('/api/draw error:', error.message || error);
+    console.error(
+      '/api/draw error:',
+      error?.response?.data || error?.errors || error?.message || error
+    );
     return res.status(500).json({ error: 'draw failed' });
   }
 });
@@ -252,7 +296,10 @@ app.post('/api/claim', async (req, res) => {
       prize: mapPrize(existing.prizeKey)
     });
   } catch (error) {
-    console.error('/api/claim error:', error.message || error);
+    console.error(
+      '/api/claim error:',
+      error?.response?.data || error?.errors || error?.message || error
+    );
     return res.status(500).json({ error: 'claim failed' });
   }
 });
@@ -511,4 +558,8 @@ async function handleEvent(event) {
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`server running on ${port}`);
+  console.log('GOOGLE_SHEET_ID exists:', !!GOOGLE_SHEET_ID);
+  console.log('GOOGLE_SERVICE_ACCOUNT_EMAIL exists:', !!GOOGLE_SERVICE_ACCOUNT_EMAIL);
+  console.log('GOOGLE_PRIVATE_KEY exists:', !!GOOGLE_PRIVATE_KEY_RAW);
+  console.log('GOOGLE_PRIVATE_KEY has BEGIN:', GOOGLE_PRIVATE_KEY_RAW.includes('BEGIN PRIVATE KEY'));
 });
