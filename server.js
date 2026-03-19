@@ -136,11 +136,13 @@ function mapPrize(prizeKey) {
 
 async function findUserDrawRecord(userId) {
   const rows = await getAllDrawRows();
+
   if (rows.length <= 1) return null;
 
   for (let i = 1; i < rows.length; i++) {
     const row = rows[i];
     const rowUserId = row[1] || '';
+
     if (rowUserId === userId) {
       return {
         rowIndex: i + 1,
@@ -158,49 +160,13 @@ async function findUserDrawRecord(userId) {
 }
 
 // =======================
-// Google 測試 API
-// =======================
-app.get('/api/test-google', async (req, res) => {
-  try {
-    console.log('GOOGLE_SHEET_ID exists:', !!GOOGLE_SHEET_ID);
-    console.log('GOOGLE_SERVICE_ACCOUNT_EMAIL exists:', !!GOOGLE_SERVICE_ACCOUNT_EMAIL);
-    console.log('GOOGLE_PRIVATE_KEY exists:', !!GOOGLE_PRIVATE_KEY_RAW);
-    console.log(
-      'GOOGLE_PRIVATE_KEY has BEGIN:',
-      GOOGLE_PRIVATE_KEY_RAW.includes('BEGIN PRIVATE KEY')
-    );
-
-    const sheets = getSheetsClient();
-
-    const resp = await sheets.spreadsheets.values.get({
-      spreadsheetId: GOOGLE_SHEET_ID,
-      range: 'Sheet1!A1:F5'
-    });
-
-    return res.json({
-      ok: true,
-      values: resp.data.values || []
-    });
-  } catch (error) {
-    console.error(
-      '/api/test-google error:',
-      error?.response?.data || error?.errors || error?.message || error
-    );
-
-    return res.status(500).json({
-      ok: false,
-      error: error?.response?.data || error?.errors || error?.message || String(error)
-    });
-  }
-});
-
-// =======================
 // LIFF API
 // =======================
 
 app.post('/api/draw/status', async (req, res) => {
   try {
     const { accessToken } = req.body || {};
+
     if (!accessToken) {
       return res.status(400).json({ error: 'missing accessToken' });
     }
@@ -226,6 +192,7 @@ app.post('/api/draw/status', async (req, res) => {
       '/api/draw/status error:',
       error?.response?.data || error?.errors || error?.message || error
     );
+
     return res.status(500).json({ error: 'status check failed' });
   }
 });
@@ -233,6 +200,7 @@ app.post('/api/draw/status', async (req, res) => {
 app.post('/api/draw', async (req, res) => {
   try {
     const { accessToken } = req.body || {};
+
     if (!accessToken) {
       return res.status(400).json({ error: 'missing accessToken' });
     }
@@ -269,6 +237,7 @@ app.post('/api/draw', async (req, res) => {
       '/api/draw error:',
       error?.response?.data || error?.errors || error?.message || error
     );
+
     return res.status(500).json({ error: 'draw failed' });
   }
 });
@@ -276,6 +245,7 @@ app.post('/api/draw', async (req, res) => {
 app.post('/api/claim', async (req, res) => {
   try {
     const { accessToken } = req.body || {};
+
     if (!accessToken) {
       return res.status(400).json({ error: 'missing accessToken' });
     }
@@ -300,6 +270,7 @@ app.post('/api/claim', async (req, res) => {
       '/api/claim error:',
       error?.response?.data || error?.errors || error?.message || error
     );
+
     return res.status(500).json({ error: 'claim failed' });
   }
 });
@@ -312,7 +283,7 @@ app.post('/webhook', line.middleware(config), async (req, res) => {
     const results = await Promise.all(req.body.events.map(handleEvent));
     res.json(results);
   } catch (error) {
-    console.error('Webhook Error:', error?.response?.data || error.message || error);
+    console.error('Webhook Error:', error?.response?.data || error?.message || error);
     res.status(500).end();
   }
 });
@@ -558,8 +529,4 @@ async function handleEvent(event) {
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`server running on ${port}`);
-  console.log('GOOGLE_SHEET_ID exists:', !!GOOGLE_SHEET_ID);
-  console.log('GOOGLE_SERVICE_ACCOUNT_EMAIL exists:', !!GOOGLE_SERVICE_ACCOUNT_EMAIL);
-  console.log('GOOGLE_PRIVATE_KEY exists:', !!GOOGLE_PRIVATE_KEY_RAW);
-  console.log('GOOGLE_PRIVATE_KEY has BEGIN:', GOOGLE_PRIVATE_KEY_RAW.includes('BEGIN PRIVATE KEY'));
 });
