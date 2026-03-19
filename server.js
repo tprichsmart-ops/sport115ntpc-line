@@ -67,12 +67,12 @@ function pickPrize() {
   return Math.random() < 0.7
     ? {
         prizeKey: 'm310',
-        couponUrl: 'https://lin.ee/nOBmzbiP',
+        couponUrl: 'https://lin.ee/SSGviIGg',
         title: 'EPSON M310DN 印表機應援優惠 🎉'
       }
     : {
         prizeKey: 'toner',
-        couponUrl: 'https://lin.ee/yydvi5g',
+        couponUrl: 'https://lin.ee/uhJWZfP',
         title: '隨機黑色碳粉匣贈品優惠 🎉'
       };
 }
