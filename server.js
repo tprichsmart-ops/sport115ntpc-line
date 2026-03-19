@@ -68,33 +68,57 @@ async function handleEvent(event) {
   contents: [
     {
   type: 'bubble',
-  body: {
+  size: 'mega',
+  header: {
     type: 'box',
     layout: 'vertical',
-    spacing: 'md',
+    backgroundColor: '#1D4ED8',
+    paddingAll: '20px',
     contents: [
       {
         type: 'text',
-        text: '2026全障運應援抽獎',
+        text: '2026 全障運應援抽獎',
         weight: 'bold',
+        color: '#FFFFFF',
         size: 'xl',
         wrap: true
       },
       {
         type: 'text',
-        text: '人人有獎，最高價值1萬元',
+        text: '人人有獎，最高價值 1 萬元',
+        color: '#DBEAFE',
+        size: 'sm',
+        margin: 'md',
+        wrap: true
+      }
+    ]
+  },
+  body: {
+    type: 'box',
+    layout: 'vertical',
+    spacing: 'lg',
+    paddingAll: '20px',
+    contents: [
+      {
+        type: 'text',
+        text: '點擊下方按鈕，立即開始抽獎！',
+        size: 'md',
+        weight: 'bold',
+        color: '#111111',
+        wrap: true
+      },
+      {
+        type: 'text',
+        text: '本次應援活動人人有獎，快來試試手氣，把專屬優惠帶回家 🎁',
         size: 'sm',
         color: '#666666',
         wrap: true
       },
       {
-        type: 'separator',
-        margin: 'md'
-      },
-      {
         type: 'button',
         style: 'primary',
-        margin: 'md',
+        height: 'md',
+        color: '#2563EB',
         action: {
           type: 'uri',
           label: '立即抽獎',
