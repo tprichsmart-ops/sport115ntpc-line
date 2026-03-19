@@ -72,27 +72,28 @@ async function handleEvent(event) {
   header: {
     type: 'box',
     layout: 'vertical',
-    backgroundColor: '#ECE8F3',
+    backgroundColor: '#805AD5',
     paddingAll: '20px',
     contents: [
+      {
+        type: 'text',
+        text: '🏃‍♂️ 應援活動',
+        size: 'xs',
+        color: '#D6BCFA'
+      },
       {
         type: 'text',
         text: '2026 全障運應援抽獎',
         weight: 'bold',
         color: '#FFFFFF',
         size: 'xl',
-        wrap: true
+        wrap: true,
+        margin: 'md'
       },
-      {
-  type: 'text',
-  text: '🏃‍♂️ 應援活動',
-  size: 'xs',
-  color: '#BBF7D0'
-     },
       {
         type: 'text',
         text: '人人有獎，最高價值 1 萬元',
-        color: '#DBEAFE',
+        color: '#ECE8F3',
         size: 'sm',
         margin: 'md',
         wrap: true
