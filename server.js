@@ -404,7 +404,7 @@ app.post('/api/push-after-draw', async (req, res) => {
         type: 'text',
         text:
           '恭喜您完成抽獎 🎉\n' +
-          '優惠券請記得於期限內使用喔！\n\n' +
+          '優惠券請記得於購買 Epson M310DN 時使用喔！\n\n' +
           '若想了解設備資訊，\n' +
           '或想直接使用這次優惠，\n' +
           '都可以點下方按鈕，我來協助您 😊'
