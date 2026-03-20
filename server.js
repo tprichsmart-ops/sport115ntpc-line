@@ -533,7 +533,7 @@ async function handleEvent(event) {
                 type: 'bubble',
                 hero: {
                   type: 'image',
-                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_M310.jpg',
+                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_M310_V1.jpg',
                   size: 'full',
                   aspectRatio: '1:1',
                   aspectMode: 'cover'
@@ -563,7 +563,7 @@ async function handleEvent(event) {
                 type: 'bubble',
                 hero: {
                   type: 'image',
-                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_toner.jpg',
+                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_toner_V1.jpg',
                   size: 'full',
                   aspectRatio: '1:1',
                   aspectMode: 'cover'
@@ -593,7 +593,7 @@ async function handleEvent(event) {
                 type: 'bubble',
                 hero: {
                   type: 'image',
-                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_0.jpg',
+                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_0_V1.jpg',
                   size: 'full',
                   aspectRatio: '1:1',
                   aspectMode: 'cover'
