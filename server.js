@@ -135,7 +135,7 @@ function mapPrize(prizeKey) {
     return {
       prizeKey: 'm310',
       couponUrl: 'https://lin.ee/pvY3jdF',
-      title: '恭喜您抽中：\nEPSON M310DN 印表機應援優惠 🎉',
+      title: '恭喜您抽中：\nEPSON M310DN 雙機應援優惠 🎉',
       desc: '請點下方按鈕回 LINE 領取優惠券。',
       imageIndex: 2
     };
