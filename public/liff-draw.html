@@ -105,6 +105,10 @@
       font-weight: 700;
       cursor: pointer;
     }
+    .btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
     .btn-primary {
       background: #6B46C1;
       color: #fff;
@@ -144,9 +148,9 @@
           <div id="status" class="status">準備好了就開始抽獎 🎁</div>
 
           <div class="slot">
-            <img id="img0" src="/assets/GET_0_V1.jpg" class="active" />
-            <img id="img1" src="/assets/GET_toner_V1.jpg" />
-            <img id="img2" src="/assets/GET_M310_V1.jpg" />
+            <img id="img0" src="/assets/GET_0.jpg" class="active" />
+            <img id="img1" src="/assets/GET_toner.jpg" />
+            <img id="img2" src="/assets/GET_M310.jpg" />
           </div>
 
           <button id="drawBtn" class="btn btn-primary">立即抽獎</button>
@@ -235,9 +239,7 @@
     async function checkStatus() {
       const data = await postJson('/api/draw/status', { accessToken });
 
-      if (!data.alreadyDrawn) {
-        return;
-      }
+      if (!data.alreadyDrawn) return;
 
       document.getElementById('drawBtn').style.display = 'none';
 
@@ -250,7 +252,7 @@
         document.getElementById('status').textContent = '您已完成本次抽獎';
         document.getElementById('resultTitle').textContent = '您已完成本次抽獎';
         document.getElementById('resultDesc').textContent =
-          '請點擊下方按鈕，回 LINE 查看您的優惠與後續說明';
+          '請點擊下方按鈕，先前往您的優惠券頁面';
       }
 
       currentPrize = data.prize;
@@ -280,7 +282,7 @@
             document.getElementById('status').textContent = '您已完成本次抽獎';
             document.getElementById('resultTitle').textContent = '您已完成本次抽獎';
             document.getElementById('resultDesc').textContent =
-              '請點擊下方按鈕，回 LINE 查看您的優惠與後續說明';
+              '請點擊下方按鈕，先前往您的優惠券頁面';
           }
 
           currentPrize = data.prize;
@@ -295,7 +297,7 @@
         applyPrizeToUI(data.prize);
         document.getElementById('drawBtn').style.display = 'none';
       } catch (err) {
-        console.error(err);
+        console.error('draw error:', err);
         document.getElementById('status').textContent = '抽獎失敗，請稍後再試。';
         document.getElementById('drawBtn').disabled = false;
       } finally {
@@ -303,27 +305,25 @@
       }
     }
 
-    <script>
-  async function claimPrize() {
-    if (!currentPrize) return;
+    async function claimPrize() {
+      if (!currentPrize) return;
 
-    const claimBtn = document.getElementById('claimBtn');
-    claimBtn.disabled = true;
-    claimBtn.textContent = '處理中...';
+      const claimBtn = document.getElementById('claimBtn');
+      claimBtn.disabled = true;
+      claimBtn.textContent = '處理中...';
 
-    try {
-      await postJson('/api/claim', { accessToken });
-      await postJson('/api/push-after-draw', { accessToken });
+      try {
+        await postJson('/api/claim', { accessToken });
+        await postJson('/api/push-after-draw', { accessToken });
 
-      window.location.href = currentPrize.couponUrl;
-    } catch (err) {
-      console.error('claimPrize error:', err);
-      document.getElementById('status').textContent = '處理失敗，請稍後再試。';
-      claimBtn.disabled = false;
-      claimBtn.textContent = '回 LINE 領優惠券';
+        window.location.href = currentPrize.couponUrl;
+      } catch (err) {
+        console.error('claimPrize error:', err);
+        document.getElementById('status').textContent = '處理失敗，請稍後再試。';
+        claimBtn.disabled = false;
+        claimBtn.textContent = '回 LINE 領優惠券';
+      }
     }
-  }
-</script>
 
     async function init() {
       try {
@@ -335,12 +335,13 @@
         }
 
         accessToken = liff.getAccessToken();
+
         document.getElementById('loading').style.display = 'none';
         document.getElementById('main').style.display = 'block';
 
         await checkStatus();
       } catch (err) {
-        console.error(err);
+        console.error('init error:', err);
         document.getElementById('loading').textContent = '載入失敗，請回 LINE 重新開啟。';
       }
     }
