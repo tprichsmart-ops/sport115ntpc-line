@@ -538,7 +538,7 @@ async function handleEvent(event) {
                 type: 'bubble',
                 hero: {
                   type: 'image',
-                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_M310_V2.jpg',
+                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_M310_V3.jpg',
                   size: 'full',
                   aspectRatio: '1:1',
                   aspectMode: 'cover'
