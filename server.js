@@ -559,7 +559,7 @@ async function handleEvent(event) {
                   contents: [
                     {
                       type: 'text',
-                      text: 'EPSON M310DN 印表機 1 台',
+                      text: '加碼贈EPSON M310DN 印表機 1 台',
                       weight: 'bold',
                       size: 'md',
                       wrap: true
