@@ -114,7 +114,7 @@ function pickPrize() {
   if (random < 70) {
     return {
       prizeKey: 'm310',
-      couponUrl: 'https://lin.ee/pvY3jdF',
+      couponUrl: 'https://lin.ee/NlDXfDT',
       title: '恭喜您抽中：\nEPSON M310DN 雙機應援優惠 🎉',
       desc: '請點下方按鈕回 LINE 領取優惠券。',
       imageIndex: 2
@@ -123,7 +123,7 @@ function pickPrize() {
 
   return {
     prizeKey: 'toner',
-    couponUrl: 'https://lin.ee/WMZu6ZU',
+    couponUrl: 'https://lin.ee/R6jCME4',
     title: '恭喜您抽中：\n隨機黑色碳粉匣贈品優惠 🎉',
     desc: '請點下方按鈕回 LINE 領取優惠券。',
     imageIndex: 1
@@ -134,7 +134,7 @@ function mapPrize(prizeKey) {
   if (prizeKey === 'm310') {
     return {
       prizeKey: 'm310',
-      couponUrl: 'https://lin.ee/pvY3jdF',
+      couponUrl: 'https://lin.ee/NlDXfDT',
       title: '恭喜您抽中：\nEPSON M310DN 雙機應援優惠 🎉',
       desc: '請點下方按鈕回 LINE 領取優惠券。',
       imageIndex: 2
@@ -143,7 +143,7 @@ function mapPrize(prizeKey) {
 
   return {
     prizeKey: 'toner',
-    couponUrl: 'https://lin.ee/WMZu6ZU',
+    couponUrl: 'https://lin.ee/R6jCME4',
     title: '恭喜您抽中：\n隨機黑色碳粉匣贈品優惠 🎉',
     desc: '請點下方按鈕回 LINE 領取優惠券。',
     imageIndex: 1
@@ -362,31 +362,40 @@ app.post('/api/push-after-draw', async (req, res) => {
           ]
         },
         footer: {
-          type: 'box',
-          layout: 'vertical',
-          spacing: 'sm',
-          contents: [
-            {
-              type: 'button',
-              style: 'secondary',
-              action: {
-                type: 'postback',
-                label: '設備型錄',
-                data: 'action=view_catalog'
-              }
-            },
-            {
-              type: 'button',
-              style: 'primary',
-              color: '#6B46C1',
-              action: {
-                type: 'message',
-                label: '我要用優惠',
-                text: '我要使用優惠券，請協助我'
-              }
-            }
-          ]
-        }
+  type: 'box',
+  layout: 'vertical',
+  spacing: 'sm',
+  contents: [
+    {
+      type: 'button',
+      style: 'secondary',
+      action: {
+        type: 'postback',
+        label: '設備型錄',
+        data: 'action=view_catalog'
+      }
+    },
+    {
+      type: 'button',
+      style: 'secondary',
+      action: {
+        type: 'uri',
+        label: '查看我的優惠券',
+        uri: prize.couponUrl
+      }
+    },
+    {
+      type: 'button',
+      style: 'primary',
+      color: '#6B46C1',
+      action: {
+        type: 'message',
+        label: '我要用優惠',
+        text: '我要使用優惠券，請協助我'
+      }
+    }
+  ]
+}
       }
     };
 
@@ -538,7 +547,7 @@ async function handleEvent(event) {
                 type: 'bubble',
                 hero: {
                   type: 'image',
-                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_M310_V3.jpg',
+                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_M310_V5.jpg',
                   size: 'full',
                   aspectRatio: '1:1',
                   aspectMode: 'cover'
@@ -568,7 +577,7 @@ async function handleEvent(event) {
                 type: 'bubble',
                 hero: {
                   type: 'image',
-                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_toner_V2.jpg',
+                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_toner_V5.jpg',
                   size: 'full',
                   aspectRatio: '1:1',
                   aspectMode: 'cover'
@@ -598,7 +607,7 @@ async function handleEvent(event) {
                 type: 'bubble',
                 hero: {
                   type: 'image',
-                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_0_V2.jpg',
+                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_0_V5.jpg',
                   size: 'full',
                   aspectRatio: '1:1',
                   aspectMode: 'cover'
