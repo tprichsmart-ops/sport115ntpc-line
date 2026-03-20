@@ -114,7 +114,7 @@ function pickPrize() {
   if (random < 70) {
     return {
       prizeKey: 'm310',
-      couponUrl: 'https://lin.ee/SSGviIGg',
+      couponUrl: 'https://lin.ee/6AjSE6B',
       title: '恭喜您抽中：\nEPSON M310DN 印表機應援優惠 🎉',
       desc: '請點下方按鈕回 LINE 領取優惠券。',
       imageIndex: 2
@@ -123,7 +123,7 @@ function pickPrize() {
 
   return {
     prizeKey: 'toner',
-    couponUrl: 'https://lin.ee/uhJWZfP',
+    couponUrl: 'https://lin.ee/WMZu6ZU',
     title: '恭喜您抽中：\n隨機黑色碳粉匣贈品優惠 🎉',
     desc: '請點下方按鈕回 LINE 領取優惠券。',
     imageIndex: 1
@@ -134,7 +134,7 @@ function mapPrize(prizeKey) {
   if (prizeKey === 'm310') {
     return {
       prizeKey: 'm310',
-      couponUrl: 'https://lin.ee/SSGviIGg',
+      couponUrl: 'https://lin.ee/6AjSE6B',
       title: '恭喜您抽中：\nEPSON M310DN 印表機應援優惠 🎉',
       desc: '請點下方按鈕回 LINE 領取優惠券。',
       imageIndex: 2
@@ -143,7 +143,7 @@ function mapPrize(prizeKey) {
 
   return {
     prizeKey: 'toner',
-    couponUrl: 'https://lin.ee/uhJWZfP',
+    couponUrl: 'https://lin.ee/WMZu6ZU',
     title: '恭喜您抽中：\n隨機黑色碳粉匣贈品優惠 🎉',
     desc: '請點下方按鈕回 LINE 領取優惠券。',
     imageIndex: 1
