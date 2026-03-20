@@ -124,7 +124,7 @@ function pickPrize() {
   return {
     prizeKey: 'toner',
     couponUrl: 'https://lin.ee/R6jCME4',
-    title: '恭喜您抽中：\n隨機黑色碳粉匣贈品優惠 🎉',
+    title: '恭喜您抽中：\n加碼贈黑色碳粉匣乙支優惠 🎉',
     desc: '請點下方按鈕回 LINE 領取優惠券。',
     imageIndex: 1
   };
@@ -144,7 +144,7 @@ function mapPrize(prizeKey) {
   return {
     prizeKey: 'toner',
     couponUrl: 'https://lin.ee/R6jCME4',
-    title: '恭喜您抽中：\n隨機黑色碳粉匣贈品優惠 🎉',
+    title: '恭喜您抽中：\n加碼贈黑色碳粉匣乙支優惠 🎉',
     desc: '請點下方按鈕回 LINE 領取優惠券。',
     imageIndex: 1
   };
@@ -589,7 +589,7 @@ async function handleEvent(event) {
                   contents: [
                     {
                       type: 'text',
-                      text: '隨機黑色碳粉匣贈品 1 支',
+                      text: '黑色碳粉匣贈品 1 支',
                       weight: 'bold',
                       size: 'md',
                       wrap: true
