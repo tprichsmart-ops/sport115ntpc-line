@@ -403,8 +403,8 @@ app.post('/api/push-after-draw', async (req, res) => {
       {
         type: 'text',
         text:
-          '恭喜您完成抽獎 🎉\n' +
-          '優惠券請記得於購買 Epson M310DN 時使用喔！\n\n' +
+          '恭喜您完成抽獎與獲得優惠券 🎉\n' +
+          '請記得在購買Epson M310DN時使用喔！\n\n' +
           '若想了解設備資訊，\n' +
           '或想直接使用這次優惠，\n' +
           '都可以點下方按鈕，我來協助您 😊'
@@ -589,7 +589,7 @@ async function handleEvent(event) {
                   contents: [
                     {
                       type: 'text',
-                      text: '黑色碳粉匣贈品 1 支',
+                      text: '加碼贈黑色碳粉匣 1 支',
                       weight: 'bold',
                       size: 'md',
                       wrap: true
