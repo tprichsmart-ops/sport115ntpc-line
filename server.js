@@ -330,7 +330,7 @@ app.post('/api/push-after-draw', async (req, res) => {
             },
             {
               type: 'text',
-              text: '查看設備資訊，或讓我們協助您兌換優惠券',
+              text: '查看設備資訊，或讓我們協助您兌換優惠',
               color: '#E9D8FD',
               size: 'sm',
               margin: 'md',
