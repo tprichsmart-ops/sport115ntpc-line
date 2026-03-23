@@ -115,7 +115,7 @@ function pickPrize() {
     return {
       prizeKey: 'm310',
       couponUrl: 'https://lin.ee/T4I6pBH',
-      title: '恭喜您抽中：\nEPSON M310DN 雙機應援優惠 🎉',
+      title: '恭喜您抽中：\n加碼贈EPSON M310DN印表機1台兌換券 🎉',
       desc: '請點下方按鈕回 LINE 領取優惠券。',
       imageIndex: 2
     };
@@ -124,7 +124,7 @@ function pickPrize() {
   return {
     prizeKey: 'toner',
     couponUrl: 'https://lin.ee/xOrudOH',
-    title: '恭喜您抽中：\n加碼贈黑色碳粉匣乙支優惠 🎉',
+    title: '恭喜您抽中：\n加碼贈高容量黑色碳粉匣1支兌換券 🎉',
     desc: '請點下方按鈕回 LINE 領取優惠券。',
     imageIndex: 1
   };
@@ -135,7 +135,7 @@ function mapPrize(prizeKey) {
     return {
       prizeKey: 'm310',
       couponUrl: 'https://lin.ee/T4I6pBH',
-      title: '恭喜您抽中：\nEPSON M310DN 雙機應援優惠 🎉',
+      title: '恭喜您抽中：\n加碼贈EPSON M310DN印表機1台兌換券 🎉',
       desc: '請點下方按鈕回 LINE 領取優惠券。',
       imageIndex: 2
     };
@@ -144,7 +144,7 @@ function mapPrize(prizeKey) {
   return {
     prizeKey: 'toner',
     couponUrl: 'https://lin.ee/xOrudOH',
-    title: '恭喜您抽中：\n加碼贈黑色碳粉匣乙支優惠 🎉',
+    title: '恭喜您抽中：\n加碼贈高容量黑色碳粉匣1支兌換券 🎉',
     desc: '請點下方按鈕回 LINE 領取優惠券。',
     imageIndex: 1
   };
@@ -330,7 +330,7 @@ app.post('/api/push-after-draw', async (req, res) => {
             },
             {
               type: 'text',
-              text: '查看設備資訊，或讓我們協助您使用優惠',
+              text: '查看設備資訊，或讓我們協助您兌換優惠券',
               color: '#E9D8FD',
               size: 'sm',
               margin: 'md',
@@ -354,7 +354,7 @@ app.post('/api/push-after-draw', async (req, res) => {
             },
             {
               type: 'text',
-              text: '您可以先查看設備型錄，或直接讓我們協助您使用這次優惠。',
+              text: '您可以先查看設備型錄\n或直接讓我們協助您兌換優惠券。',
               size: 'sm',
               color: '#666666',
               wrap: true
@@ -390,7 +390,7 @@ app.post('/api/push-after-draw', async (req, res) => {
       color: '#6B46C1',
       action: {
         type: 'message',
-        label: '我要用優惠',
+        label: '我要兌換優惠券',
         text: '我要使用優惠券，請協助我'
       }
     }
@@ -646,12 +646,11 @@ async function handleEvent(event) {
         type: 'text',
         text:
           '好的，我來協助您使用應援優惠 😊\n\n' +
-          '請回覆以下資訊，接下來交給我~\n\n' +
-          '1. 裝機窗口姓名\n' +
-          '2. 聯絡電話\n' +
-          '3. 安裝地址\n' +
-          '4. 服務單位名稱\n' +
-          '5. 統編\n\n' +
+          '請提供以下訊息，接下來交給我~\n\n' +
+          '1. 聯絡人姓名：\n' +
+          '2. 聯絡人電話：\n' +
+          '3. 預計安裝地址：\n' +
+          '4. 其他：\n' +          
           '我會請專人盡快與您聯繫'
       });
     }
