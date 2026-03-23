@@ -114,7 +114,7 @@ function pickPrize() {
   if (random < 70) {
     return {
       prizeKey: 'm310',
-      couponUrl: 'https://lin.ee/NlDXfDT',
+      couponUrl: 'https://lin.ee/T4I6pBH',
       title: '恭喜您抽中：\nEPSON M310DN 雙機應援優惠 🎉',
       desc: '請點下方按鈕回 LINE 領取優惠券。',
       imageIndex: 2
@@ -123,7 +123,7 @@ function pickPrize() {
 
   return {
     prizeKey: 'toner',
-    couponUrl: 'https://lin.ee/R6jCME4',
+    couponUrl: 'https://lin.ee/xOrudOH',
     title: '恭喜您抽中：\n加碼贈黑色碳粉匣乙支優惠 🎉',
     desc: '請點下方按鈕回 LINE 領取優惠券。',
     imageIndex: 1
@@ -134,7 +134,7 @@ function mapPrize(prizeKey) {
   if (prizeKey === 'm310') {
     return {
       prizeKey: 'm310',
-      couponUrl: 'https://lin.ee/NlDXfDT',
+      couponUrl: 'https://lin.ee/T4I6pBH',
       title: '恭喜您抽中：\nEPSON M310DN 雙機應援優惠 🎉',
       desc: '請點下方按鈕回 LINE 領取優惠券。',
       imageIndex: 2
@@ -143,7 +143,7 @@ function mapPrize(prizeKey) {
 
   return {
     prizeKey: 'toner',
-    couponUrl: 'https://lin.ee/R6jCME4',
+    couponUrl: 'https://lin.ee/xOrudOH',
     title: '恭喜您抽中：\n加碼贈黑色碳粉匣乙支優惠 🎉',
     desc: '請點下方按鈕回 LINE 領取優惠券。',
     imageIndex: 1
@@ -547,7 +547,7 @@ async function handleEvent(event) {
                 type: 'bubble',
                 hero: {
                   type: 'image',
-                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_M310_V5.jpg',
+                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_M310_V6.jpg',
                   size: 'full',
                   aspectRatio: '1:1',
                   aspectMode: 'cover'
@@ -577,7 +577,7 @@ async function handleEvent(event) {
                 type: 'bubble',
                 hero: {
                   type: 'image',
-                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_toner_V5.jpg',
+                  url: 'https://sport115ntpc-line.onrender.com/assets/GET_toner_V6.jpg',
                   size: 'full',
                   aspectRatio: '1:1',
                   aspectMode: 'cover'
