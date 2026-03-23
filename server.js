@@ -566,7 +566,7 @@ async function handleEvent(event) {
                     },
                     {
                       type: 'text',
-                      text: '價值 10,900 元',
+                      text: '價值 11,990 元',
                       size: 'sm',
                       color: '#666666'
                     }
