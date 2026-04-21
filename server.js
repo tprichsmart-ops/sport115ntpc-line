@@ -174,6 +174,11 @@ async function findUserDrawRecord(userId) {
 
   return null;
 }
+function normalizeAnswer(text) {
+  return (text || '')
+    .replace(/[()（）\s]/g, '')
+    .toUpperCase();
+}
 
 // =======================
 // LIFF API
@@ -451,7 +456,25 @@ async function handleEvent(event) {
 
   if (event.type === 'message' && event.message.type === 'text') {
     const userText = (event.message.text || '').trim();
+    const answer = normalizeAnswer(userText);
 
+    if (['A', 'B', 'C'].includes(answer)) {
+      let imageUrl = '';
+
+      if (answer === 'A') {
+        imageUrl = 'https://sport115ntpc-line.onrender.com/assets/A.png';
+      } else if (answer === 'B') {
+        imageUrl = 'https://sport115ntpc-line.onrender.com/assets/B.png';
+      } else if (answer === 'C') {
+        imageUrl = 'https://sport115ntpc-line.onrender.com/assets/C.png';
+      }
+
+      return client.replyMessage(event.replyToken, {
+        type: 'image',
+        originalContentUrl: imageUrl,
+        previewImageUrl: imageUrl
+      });
+    }
     if (userText.includes('我來為2026全障運選手加油')) {
       const messages = [
         {
