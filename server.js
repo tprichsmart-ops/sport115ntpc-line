@@ -19,6 +19,9 @@ const GOOGLE_SHEET_ID = process.env.GOOGLE_SHEET_ID;
 const GOOGLE_SERVICE_ACCOUNT_EMAIL = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
 const GOOGLE_PRIVATE_KEY_RAW = process.env.GOOGLE_PRIVATE_KEY || '';
 
+const QUIZ_ABC_ENABLED = process.env.QUIZ_ABC_ENABLED !== 'false';
+const QUIZ_ABC_END_AT = process.env.QUIZ_ABC_END_AT || '2026-04-27T00:00:00+08:00';
+
 // 靜態檔案
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
@@ -30,6 +33,18 @@ app.use('/api', express.json());
 app.get('/health', (req, res) => {
   res.status(200).send('ok');
 });
+
+function isQuizAbcActive() {
+  if (!QUIZ_ABC_ENABLED) return false;
+
+  const endAt = new Date(QUIZ_ABC_END_AT);
+  if (Number.isNaN(endAt.getTime())) {
+    console.error('Invalid QUIZ_ABC_END_AT:', QUIZ_ABC_END_AT);
+    return false;
+  }
+
+  return new Date() < endAt;
+}
 
 function getSheetsClient() {
   const auth = new google.auth.GoogleAuth({
@@ -125,8 +140,8 @@ function pickPrize() {
     prizeKey: 'toner',
     couponUrl: 'https://lin.ee/xOrudOH',
     title: '恭喜您抽中：\n加碼贈高容量黑色碳粉匣1支兌換券 🎉',
-    desc: '請點下方按鈕回 LINE 領取優惠券。',
-    imageIndex: 1
+      desc: '請點下方按鈕回 LINE 領取優惠券。',
+      imageIndex: 1
   };
 }
 
@@ -174,6 +189,7 @@ async function findUserDrawRecord(userId) {
 
   return null;
 }
+
 function normalizeAnswer(text) {
   return (text || '')
     .replace(/[()（）\s]/g, '')
@@ -367,40 +383,40 @@ app.post('/api/push-after-draw', async (req, res) => {
           ]
         },
         footer: {
-  type: 'box',
-  layout: 'vertical',
-  spacing: 'sm',
-  contents: [
-    {
-      type: 'button',
-      style: 'secondary',
-      action: {
-        type: 'postback',
-        label: '設備型錄',
-        data: 'action=view_catalog'
-      }
-    },
-    {
-      type: 'button',
-      style: 'secondary',
-      action: {
-        type: 'uri',
-        label: '查看我的優惠券',
-        uri: prize.couponUrl
-      }
-    },
-    {
-      type: 'button',
-      style: 'primary',
-      color: '#6B46C1',
-      action: {
-        type: 'message',
-        label: '我要兌換優惠券',
-        text: '我要使用優惠券，請協助我'
-      }
-    }
-  ]
-}
+          type: 'box',
+          layout: 'vertical',
+          spacing: 'sm',
+          contents: [
+            {
+              type: 'button',
+              style: 'secondary',
+              action: {
+                type: 'postback',
+                label: '設備型錄',
+                data: 'action=view_catalog'
+              }
+            },
+            {
+              type: 'button',
+              style: 'secondary',
+              action: {
+                type: 'uri',
+                label: '查看我的優惠券',
+                uri: prize.couponUrl
+              }
+            },
+            {
+              type: 'button',
+              style: 'primary',
+              color: '#6B46C1',
+              action: {
+                type: 'message',
+                label: '我要兌換優惠券',
+                text: '我要使用優惠券，請協助我'
+              }
+            }
+          ]
+        }
       }
     };
 
@@ -458,7 +474,7 @@ async function handleEvent(event) {
     const userText = (event.message.text || '').trim();
     const answer = normalizeAnswer(userText);
 
-    if (['A', 'B', 'C'].includes(answer)) {
+    if (isQuizAbcActive() && ['A', 'B', 'C'].includes(answer)) {
       let imageUrl = '';
 
       if (answer === 'A') {
@@ -475,6 +491,7 @@ async function handleEvent(event) {
         previewImageUrl: imageUrl
       });
     }
+
     if (userText.includes('我來為2026全障運選手加油')) {
       const messages = [
         {
@@ -673,7 +690,7 @@ async function handleEvent(event) {
           '1. 聯絡人姓名：\n' +
           '2. 聯絡人電話：\n' +
           '3. 預計安裝地址：\n' +
-          '4. 其他：\n' +          
+          '4. 其他：\n' +
           '我會請專人盡快與您聯繫'
       });
     }
