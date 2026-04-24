@@ -12,6 +12,63 @@ const config = {
 
 const client = new line.Client(config);
 
+function getTaipeiNowParts(now = new Date()) {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Taipei',
+    weekday: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  }).formatToParts(now);
+
+  const get = (type) => parts.find((p) => p.type === type)?.value;
+
+  return {
+    weekday: get('weekday'),
+    hour: Number(get('hour')),
+    minute: Number(get('minute'))
+  };
+}
+
+function shouldUsePushBySchedule(now = new Date()) {
+  const { weekday, hour } = getTaipeiNowParts(now);
+
+  if (weekday === 'Sat' || weekday === 'Sun') {
+    return true;
+  }
+
+  if (hour >= 18) {
+    return true;
+  }
+
+  return false;
+}
+
+async function sendBySchedule(event, message) {
+  const usePush = shouldUsePushBySchedule();
+
+  try {
+    if (usePush) {
+      const userId = event.source?.userId;
+
+      if (!userId) {
+        console.error('sendBySchedule push failed: missing userId, fallback to replyMessage');
+        return client.replyMessage(event.replyToken, message);
+      }
+
+      return client.pushMessage(userId, message);
+    }
+
+    return client.replyMessage(event.replyToken, message);
+  } catch (error) {
+    console.error(
+      'sendBySchedule failed:',
+      error?.response?.data || error?.message || error
+    );
+    return null;
+  }
+}
+
 const LIFF_ID = process.env.LIFF_ID || '2009521956-OmBMwwQz';
 const LIFF_URL = `https://liff.line.me/${LIFF_ID}`;
 
@@ -22,14 +79,11 @@ const GOOGLE_PRIVATE_KEY_RAW = process.env.GOOGLE_PRIVATE_KEY || '';
 const QUIZ_ABC_ENABLED = process.env.QUIZ_ABC_ENABLED !== 'false';
 const QUIZ_ABC_END_AT = process.env.QUIZ_ABC_END_AT || '2026-04-27T00:00:00+08:00';
 
-// 靜態檔案
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// 只讓 /api 使用 JSON parser，避免影響 LINE webhook 驗簽
 app.use('/api', express.json());
 
-// 健康檢查
 app.get('/health', (req, res) => {
   res.status(200).send('ok');
 });
@@ -140,8 +194,8 @@ function pickPrize() {
     prizeKey: 'toner',
     couponUrl: 'https://lin.ee/xOrudOH',
     title: '恭喜您抽中：\n加碼贈高容量黑色碳粉匣1支兌換券 🎉',
-      desc: '請點下方按鈕回 LINE 領取優惠券。',
-      imageIndex: 1
+    desc: '請點下方按鈕回 LINE 領取優惠券。',
+    imageIndex: 1
   };
 }
 
@@ -457,6 +511,7 @@ app.post('/api/push-after-draw', async (req, res) => {
 // =======================
 // Webhook
 // =======================
+
 app.post('/webhook', line.middleware(config), async (req, res) => {
   try {
     const results = await Promise.all(req.body.events.map(handleEvent));
@@ -485,7 +540,7 @@ async function handleEvent(event) {
         imageUrl = 'https://sport115ntpc-line.onrender.com/assets/C.png';
       }
 
-      return client.replyMessage(event.replyToken, {
+      return sendBySchedule(event, {
         type: 'image',
         originalContentUrl: imageUrl,
         previewImageUrl: imageUrl
@@ -678,11 +733,11 @@ async function handleEvent(event) {
         }
       ];
 
-      return client.replyMessage(event.replyToken, messages);
+      return sendBySchedule(event, messages);
     }
 
     if (userText.includes('我要使用優惠券，請協助我')) {
-      return client.replyMessage(event.replyToken, {
+      return sendBySchedule(event, {
         type: 'text',
         text:
           '好的，我來協助您使用應援優惠 😊\n\n' +
@@ -715,7 +770,7 @@ async function handleEvent(event) {
         }
       ];
 
-      return client.replyMessage(event.replyToken, messages);
+      return sendBySchedule(event, messages);
     }
 
     return null;
